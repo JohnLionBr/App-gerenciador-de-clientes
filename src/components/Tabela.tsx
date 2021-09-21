@@ -9,6 +9,8 @@ interface TabelaProps{
 
 export default function Tabela(props){
 
+    const exibirAcoes = props.clienteExcluido || props.clienteSelecionado
+
 
     function renderizarCabecalho() {
         return(
@@ -16,7 +18,7 @@ export default function Tabela(props){
                 <th className="text-left p-4">Codigo</th>
                 <th className="text-left p-4">Nome</th>
                 <th className="text-left p-4">Idade</th>
-                <th className=" p-4">Ações </th>
+                {exibirAcoes ? <th className=" p-4">Ações </th> :  false }
             </tr>
         )
     }
@@ -29,7 +31,7 @@ export default function Tabela(props){
                     <td className="text-left p-4">{cliente.id}</td>
                     <td className="text-left p-4">{cliente.nome}</td>
                     <td className="text-left p-4">{cliente.idade}</td>
-                    {renderizarAcoes(cliente)}
+                    {exibirAcoes ? renderizarAcoes(cliente) :  false}
                 </tr>
             )
         })
@@ -38,15 +40,25 @@ export default function Tabela(props){
 
     function renderizarAcoes(cliente: Cliente) {
         return(
-            <td className="flex">
-                <button className={`flex justify-center items-center
+            <td className="flex justify-center">
+                {props.clienteSelecionado ? (
+                <button onClick={() => props.clienteSelecionado?.(cliente)} className={`flex justify-center items-center
                 text-green-600 rounded-full hover:bg-purple-50
-                p-2 m-1`}>
+                p-2 m-1
+                `}>
                     {IconeEdicao}
-                    </button>
-                <button className={`flex justify-center items-center
+                </button>
+            ) : false}
+                {props.clienteExcluido ? (
+                 <button onClick={() => props.clienteExcluido?.(cliente)} className={`
+                flex justify-center items-center
                 text-red-600 rounded-full hover:bg-purple-50
-                p-2 m-1`}>{IconeLixo}</button>
+                p-2 m-1
+                `}>
+                    {IconeLixo}
+                </button>
+                ) : false}
+               
             </td>
         )
     }
